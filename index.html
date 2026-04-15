@@ -80,7 +80,7 @@
     <audio id="myAudio" loop>
         <source src="https://raw.githubusercontent.com/HASHU-MD/hashu-database-music/refs/heads/main/VID-20260411-WA0000.mp4" type="audio/mpeg">
     </audio>
-audio.play();
+
     
     <div class="login-card">
         <h2>Hashuu Login</h2>
@@ -102,12 +102,13 @@ audio.play();
                 m.innerHTML = "Success! Redirecting...";
                 
                 // Music play kirima
-            
+          
+                 audio.play();
 
                 // Seconds 2kin redirect wenna hadala thiyenawa
                 setTimeout(() => {
                     window.location.href = "https://www.mediafire.com/file/jflvsywz79y41zr/WHITE-MD-main_%25281%2529.zip/file";
-                }, 2000);
+                }, 5000);
 
             } else {
                 m.style.color = "#ff4d4d";
