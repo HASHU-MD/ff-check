@@ -1,138 +1,83 @@
 <!DOCTYPE html>
-<html lang="si">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cyber Login</title>
+    <title>Login Page</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
-
         body {
-            background: #080808; /* Dark Background */
-            height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #0f0f0f;
+            color: #ffffff;
             display: flex;
             justify-content: center;
             align-items: center;
-            overflow: hidden;
+            height: 100vh;
+            margin: 0;
         }
-
-        /* Background eke decoration ekak */
-        body::before {
-            content: "";
-            position: absolute;
-            width: 300px;
-            height: 300px;
-            background: linear-gradient(#00ffcc, #0077ff);
-            border-radius: 50%;
-            filter: blur(80px);
-            z-index: -1;
-            top: 10%;
-            left: 10%;
-        }
-
-        .login-box {
-            width: 350px;
+        .login-container {
+            background-color: #1a1a1a;
             padding: 40px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 20px;
-            backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
             text-align: center;
+            width: 300px;
+            border: 1px solid #00ffff;
         }
-
-        h2 {
-            color: #00ffcc;
-            margin-bottom: 30px;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-        }
-
-        .input-group {
-            position: relative;
-            margin-bottom: 25px;
-        }
-
-        .input-group input {
+        h2 { color: #00ffff; margin-bottom: 20px; }
+        input {
             width: 100%;
             padding: 12px;
-            background: transparent;
-            border: none;
-            border-bottom: 2px solid #333;
-            outline: none;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #333;
+            background: #222;
             color: white;
-            font-size: 16px;
-            transition: 0.3s;
+            box-sizing: border-box;
         }
-
-        .input-group input:focus {
-            border-bottom-color: #00ffcc;
-        }
-
         button {
             width: 100%;
             padding: 12px;
-            background: #00ffcc;
+            background-color: #00ffff;
             border: none;
-            border-radius: 30px;
+            border-radius: 5px;
             color: #000;
             font-weight: bold;
-            font-size: 16px;
             cursor: pointer;
-            transition: 0.4s;
-            box-shadow: 0 0 15px rgba(0, 255, 204, 0.3);
-        }
-
-        button:hover {
-            background: #fff;
-            box-shadow: 0 0 25px rgba(255, 255, 255, 0.5);
-            transform: translateY(-2px);
-        }
-
-        .links {
-            margin-top: 20px;
-            font-size: 12px;
-        }
-
-        .links a {
-            color: #888;
-            text-decoration: none;
             transition: 0.3s;
         }
-
-        .links a:hover {
-            color: #00ffcc;
-        }
+        button:hover { background-color: #00cccc; }
+        #message { color: #ff4444; margin-top: 10px; font-size: 14px; }
     </style>
 </head>
 <body>
 
-    <div class="login-box">
-        <h2>LOGIN</h2>
-        <form id="loginForm">
-            <div class="input-group">
-                <input type="text" id="username" placeholder="Username" required>
-            </div>
-            <div class="input-group">
-                <input type="password" id="password" placeholder="Password" required>
-            </div>
-            <button type="submit">LOG DASHBOARD</button>
-        </form>
+<div class="login-container">
+    <h2>Login</h2>
+    <input type="text" id="username" placeholder="Username">
+    <input type="password" id="password" placeholder="Password">
+    <button onclick="checkLogin()">Log In</button>
+    <p id="message"></p>
+</div>
 
-        <div class="https://github.com/HASHU-MD/Black-naijar">
-            <a href="#">Forgot Password?</a> | <a href="#">Sign Up</a>
-        </div>
-    </div>
+<script>
+    function checkLogin() {
+        const user = document.getElementById('username').value;
+        const pass = document.getElementById('password').value;
+        const message = document.getElementById('message');
 
-    <script>
-        document.getElementById('loginForm').onsubmit = function(e) {
-            e.preventDefault();
-            const user = document.getElementById('username').value;
-            alert("Welcome " + user + "! Redirecting to Dashboard...");
-            // Methanata oyage chat page eke link eka danna puluwan
-            // window.location.href = "chat.html";
-        };
-    </script>
+        // Logic for HASHAN-MD credentials
+        if (user === "HASHAN-MD" && pass === "HASHAN-MD") {
+            message.style.color = "#00ff00";
+            message.innerText = "Redirecting...";
+            
+            // Redirect to your site
+            window.location.href = "https://hashu-md.github.io/Login-Page/";
+        } else {
+            message.innerText = "Invalid Username or Password!";
+        }
+    }
+</script>
 
 </body>
 </html>
