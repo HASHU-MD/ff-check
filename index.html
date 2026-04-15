@@ -80,7 +80,8 @@
     <audio id="myAudio" loop>
         <source src="https://raw.githubusercontent.com/HASHU-MD/hashu-database-music/refs/heads/main/VID-20260411-WA0000.mp4" type="audio/mpeg">
     </audio>
-
+audio.play();
+    
     <div class="login-card">
         <h2>Hashuu Login</h2>
         <input type="text" id="user" placeholder="Username">
@@ -95,7 +96,6 @@
             const p = document.getElementById("pass").value;
             const m = document.getElementById("msg");
             const audio = document.getElementById("myAudio");
-audio.play();
             
             if (u === "HASHUU" && p === "HSSHSS2024") {
                 m.style.color = "#00ff88";
