@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cyber Chat Web</title>
+    <title>Cyber Chat with Photos</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
         
@@ -18,7 +18,7 @@
 
         .chat-container {
             width: 400px;
-            height: 600px;
+            height: 650px;
             background: #1a1a1a;
             border: 1px solid #00ffcc;
             display: flex;
@@ -28,7 +28,6 @@
             box-shadow: 0 0 20px #00ffcc55;
         }
 
-        /* Header Section */
         .chat-header {
             padding: 15px;
             background: #00ffcc;
@@ -39,20 +38,13 @@
             gap: 10px;
         }
 
-        .chat-header .status-dot {
-            width: 10px; height: 10px;
-            background: #000;
-            border-radius: 50%;
-        }
-
-        /* Messages Area */
         .chat-messages {
             flex: 1;
             padding: 20px;
             overflow-y: auto;
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 15px;
             background-image: radial-gradient(#111 1px, transparent 1px);
             background-size: 20px 20px;
         }
@@ -62,33 +54,32 @@
             padding: 10px 15px;
             border-radius: 15px;
             font-size: 14px;
-            line-height: 1.4;
+            position: relative;
         }
 
-        .sent {
-            align-self: flex-end;
-            background: #00ffcc;
-            color: #000;
-            border-bottom-right-radius: 2px;
+        .sent { align-self: flex-end; background: #00ffcc; color: #000; border-bottom-right-radius: 2px; }
+        .received { align-self: flex-start; background: #333; color: #fff; border-bottom-left-radius: 2px; }
+
+        /* Photo styles in chat */
+        .chat-image {
+            max-width: 100%;
+            border-radius: 10px;
+            margin-top: 5px;
+            display: block;
         }
 
-        .received {
-            align-self: flex-start;
-            background: #333;
-            color: #fff;
-            border-bottom-left-radius: 2px;
-        }
-
-        /* Input Area */
         .chat-input-area {
             padding: 15px;
             background: #111;
             display: flex;
+            flex-direction: column;
             gap: 10px;
             border-top: 1px solid #333;
         }
 
-        input {
+        .controls { display: flex; gap: 10px; }
+
+        input[type="text"] {
             flex: 1;
             background: #222;
             border: 1px solid #444;
@@ -98,15 +89,30 @@
             outline: none;
         }
 
-        input:focus { border-color: #00ffcc; }
+        /* Hide the default file input and style a label as a button */
+        .file-label {
+            background: #333;
+            color: #00ffcc;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 20px;
+            border: 1px solid #00ffcc;
+        }
 
         button {
             background: #00ffcc;
             border: none;
-            padding: 0 15px;
+            padding: 10px 20px;
             border-radius: 5px;
             cursor: pointer;
             font-weight: bold;
+        }
+
+        #image-preview {
+            display: none;
+            max-width: 50px;
+            border-radius: 5px;
         }
     </style>
 </head>
@@ -114,57 +120,74 @@
 
     <div class="chat-container">
         <div class="chat-header">
-            <div class="status-dot"></div>
-            <span>CYBER CHAT GROUP</span>
+            <span>CYBER CHAT + MEDIA</span>
         </div>
 
         <div class="chat-messages" id="chatBox">
-            <div class="message received">Mokada wenne? Meka oyage chat web eka!</div>
-            <div class="message sent">Patta! Mama meka design karanawa.</div>
+            <div class="message received">Oyata dan photos yawannath puluwan!</div>
         </div>
 
         <div class="chat-input-area">
-            <input type="text" id="msgInput" placeholder="Messege ekak gahanna..." onkeypress="handleEnter(event)">
-            <button onclick="sendMessage()">SEND</button>
+            <div class="controls">
+                <label for="fileInput" class="file-label">📷</label>
+                <input type="file" id="fileInput" accept="image/*" style="display:none" onchange="previewImage()">
+                
+                <input type="text" id="msgInput" placeholder="Messege ekak..." onkeypress="handleEnter(event)">
+                <button onclick="sendMessage()">SEND</button>
+            </div>
+            <img id="image-preview" src="" alt="preview">
         </div>
     </div>
 
     <script>
         const chatBox = document.getElementById('chatBox');
         const msgInput = document.getElementById('msgInput');
+        const fileInput = document.getElementById('fileInput');
+        const imgPreview = document.getElementById('image-preview');
+
+        function previewImage() {
+            if (fileInput.files && fileInput.files[0]) {
+                imgPreview.style.display = "block";
+                imgPreview.src = URL.createObjectURL(fileInput.files[0]);
+            }
+        }
 
         function sendMessage() {
             const text = msgInput.value;
-            if (text.trim() !== "") {
-                // Create new message div
+            const hasFile = fileInput.files.length > 0;
+
+            if (text.trim() !== "" || hasFile) {
                 const msgDiv = document.createElement('div');
                 msgDiv.classList.add('message', 'sent');
-                msgDiv.innerText = text;
+
+                // Text eka thiyanawa nam ekathu karanna
+                if (text.trim() !== "") {
+                    const textNode = document.createElement('p');
+                    textNode.innerText = text;
+                    msgDiv.appendChild(textNode);
+                }
+
+                // Photo eka thiyanawa nam ekathu karanna
+                if (hasFile) {
+                    const img = document.createElement('img');
+                    img.src = URL.createObjectURL(fileInput.files[0]);
+                    img.classList.add('chat-image');
+                    msgDiv.appendChild(img);
+                }
                 
-                // Add to chat box
                 chatBox.appendChild(msgDiv);
                 
-                // Clear input
+                // Clear inputs
                 msgInput.value = "";
+                fileInput.value = "";
+                imgPreview.style.display = "none";
                 
-                // Scroll to bottom
                 chatBox.scrollTop = chatBox.scrollHeight;
-
-                // Auto reply (Demo purpose)
-                setTimeout(() => {
-                    const replyDiv = document.createElement('div');
-                    replyDiv.classList.add('message', 'received');
-                    replyDiv.innerText = "System: Message eka labuna!";
-                    chatBox.appendChild(replyDiv);
-                    chatBox.scrollTop = chatBox.scrollHeight;
-                }, 1000);
             }
         }
 
         function handleEnter(event) {
-            if (event.key === 'Enter') {
-                sendMessage();
-            }
+            if (event.key === 'Enter') sendMessage();
         }
     </script>
 
