@@ -3,92 +3,128 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Font Color Generator</title>
+    <title>Font & Style Generator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Bangers&family=Dancing+Script&family=Creepster&family=Roboto+Mono&display=swap" rel="stylesheet">
+    
     <style>
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #121212;
-            color: white;
+            background-color: #0a0a0a;
+            color: #00ffcc;
+            font-family: 'Orbitron', sans-serif;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             height: 100vh;
             margin: 0;
-            overflow: hidden;
+            text-shadow: 0 0 10px #00ffcc;
         }
 
         .container {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 30px;
-            border-radius: 15px;
-            backdrop-filter: blur(10px);
+            background: rgba(20, 20, 20, 0.9);
+            padding: 40px;
+            border-radius: 20px;
+            border: 2px solid #00ffcc;
+            box-shadow: 0 0 20px #00ffcc;
             text-align: center;
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            width: 80%;
+            max-width: 600px;
         }
 
-        h1 { margin-bottom: 20px; }
+        h1 { font-size: 24px; margin-bottom: 30px; }
 
-        #text-preview {
-            font-size: 40px;
-            font-weight: bold;
-            margin: 20px 0;
-            transition: color 0.3s ease;
+        #display-text {
+            font-size: 50px;
+            margin: 40px 0;
+            min-height: 80px;
+            transition: all 0.4s ease;
         }
 
-        button {
-            background: #00d4ff;
-            border: none;
+        .controls {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        select, button {
             padding: 10px 20px;
-            font-size: 18px;
-            border-radius: 5px;
+            background: transparent;
+            color: #00ffcc;
+            border: 1px solid #00ffcc;
             cursor: pointer;
-            font-weight: bold;
-            transition: 0.3s;
+            font-family: 'Orbitron', sans-serif;
+            border-radius: 5px;
+            outline: none;
         }
 
         button:hover {
-            background: #0099cc;
-            transform: scale(1.05);
+            background: #00ffcc;
+            color: #000;
         }
 
-        /* Music control style */
-        .music-info {
-            margin-top: 15px;
-            font-size: 12px;
-            opacity: 0.6;
+        /* Music info */
+        .music-status {
+            margin-top: 20px;
+            font-size: 10px;
+            letter-spacing: 2px;
+            opacity: 0.7;
         }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <h1>Font Color Generator</h1>
-        <div id="text-preview">Sample Text</div>
-        <button onclick="changeColor()">Change Color</button>
+        <h1>FONT GENERATOR</h1>
         
-        <div class="music-info">
-            <p>Background Music Playing...</p>
-            <audio id="bgMusic" loop autoplay>
-                <source src="OYA_GAVA_THIYENA_MUSIC_FILE_URL_EKA" type="audio/mpeg">
-                Your browser does not support the audio element.
-            </audio>
+        <div id="display-text">SAMPLE TEXT</div>
+
+        <div class="controls">
+            <select id="fontSelect" onchange="changeFont()">
+                <option value="'Orbitron', sans-serif">Cyber Style</option>
+                <option value="'Bangers', system-ui">Comic Style</option>
+                <option value="'Dancing Script', cursive">Cursive Style</option>
+                <option value="'Creepster', system-ui">Horror Style</option>
+                <option value="'Roboto Mono', monospace">Hacker Style</option>
+            </select>
+            
+            <button onclick="changeColor()">Random Color</button>
+        </div>
+
+        <div class="music-status">
+            SYSTEM AUDIO: <span id="status">CLICK ANYWHERE TO PLAY MUSIC</span>
         </div>
     </div>
 
+    <audio id="bgMusic" loop>
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+    </audio>
+
     <script>
-        // Font color eka change karana function eka
-        function changeColor() {
-            const randomColor = "#" + Math.floor(Math.random()*16777215).toString(16);
-            document.getElementById("text-preview").style.color = randomColor;
+        const displayText = document.getElementById('display-text');
+        const bgMusic = document.getElementById('bgMusic');
+        const statusText = document.getElementById('status');
+
+        // Font eka wenas karana function eka
+        function changeFont() {
+            const selectedFont = document.getElementById('fontSelect').value;
+            displayText.style.fontFamily = selectedFont;
         }
 
-        // Browser eken auto-play block karana nisa, screen ekata click karapu gaman music play wenna
+        // Color eka wenas karana function eka
+        function changeColor() {
+            const colors = ['#00ffcc', '#ff0055', '#0077ff', '#ffff00', '#ff00ff', '#ffffff'];
+            const randomColor = colors[Math.floor(Math.random() * colors.length)];
+            displayText.style.color = randomColor;
+            displayText.style.textShadow = `0 0 20px ${randomColor}`;
+        }
+
+        // Screen eka kohe hari click karapu gaman music play wenna
         window.addEventListener('click', () => {
-            const audio = document.getElementById('bgMusic');
-            audio.play();
+            bgMusic.play();
+            statusText.innerText = "MUSIC PLAYING ON LOOP";
         }, { once: true });
     </script>
 
 </body>
-</html>
+    </html>
