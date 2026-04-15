@@ -2,66 +2,93 @@
 <html lang="si">
 <head>
     <meta charset="UTF-8">
-    <title>Free Fire ID Checker - Hashan</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Font Color Generator</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #121212;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        h1 { margin-bottom: 20px; }
+
+        #text-preview {
+            font-size: 40px;
+            font-weight: bold;
+            margin: 20px 0;
+            transition: color 0.3s ease;
+        }
+
+        button {
+            background: #00d4ff;
+            border: none;
+            padding: 10px 20px;
+            font-size: 18px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: #0099cc;
+            transform: scale(1.05);
+        }
+
+        /* Music control style */
+        .music-info {
+            margin-top: 15px;
+            font-size: 12px;
+            opacity: 0.6;
+        }
+    </style>
 </head>
 <body>
 
-    <h1>Free Fire ID තොරතුරු පරීක්ෂකය</h1>
-    <hr>
-
-    <p>පරිශීලක හැඳුනුම්පත (Player ID) ඇතුළත් කරන්න:</p>
-    
-    <input type="number" id="playerID" placeholder="උදා: 123456789">
-    
-    <button onclick="checkPlayerInfo()">තොරතුරු සොයන්න</button>
-
-    <br><br>
-    <hr>
-
-    <div id="displayArea">
-        <p>තොරතුරු මෙහි දර්ශනය වනු ඇත.</p>
+    <div class="container">
+        <h1>Font Color Generator</h1>
+        <div id="text-preview">Sample Text</div>
+        <button onclick="changeColor()">Change Color</button>
+        
+        <div class="music-info">
+            <p>Background Music Playing...</p>
+            <audio id="bgMusic" loop autoplay>
+                <source src="OYA_GAVA_THIYENA_MUSIC_FILE_URL_EKA" type="audio/mpeg">
+                Your browser does not support the audio element.
+            </audio>
+        </div>
     </div>
 
     <script>
-        async function checkPlayerInfo() {
-            const id = document.getElementById("playerID").value;
-            const displayArea = document.getElementById("displayArea");
-
-            if (!id) {
-                alert("කරුණාකර නිවැරදි ID එකක් ඇතුළත් කරන්න!");
-                return;
-            }
-
-            displayArea.innerHTML = "<b>තොරතුරු සොයමින් පවතී... කරුණාකර රැඳී සිටින්න.</b>";
-
-            try {
-                // සටහන: මෙය තෙවන පාර්ශවීය API එකකි. 
-                // ඇතැම් විට මෙය ක්‍රියා නොකිරීමට ඉඩ ඇත.
-                const response = await fetch(`https://freefireapi.com.br/api/id/${id}?lang=en`);
-                
-                if (response.ok) {
-                    const data = await response.json();
-
-                    // තොරතුරු HTML ලෙස සැකසීම
-                    let infoHtml = `
-                        <h3>ගිණුමේ විස්තර:</h3>
-                        <ul>
-                            <li><b>නම (Nickname):</b> ${data.nickname}</li>
-                            <li><b>මට්ටම (Level):</b> ${data.level}</li>
-                            <li><b>ප්‍රාදේශීය කලාපය (Region):</b> ${data.region}</li>
-                            <li><b>Rank Points:</b> ${data.rankp}</li>
-                        </ul>
-                    `;
-                    displayArea.innerHTML = infoHtml;
-                } else {
-                    displayArea.innerHTML = "<p style='color:red;'>තොරතුරු සොයාගත නොහැකි විය. ID එක නිවැරදිදැයි පරීක්ෂා කරන්න.</p>";
-                }
-            } catch (error) {
-                console.error(error);
-                displayArea.innerHTML = "<p style='color:red;'>සම්බන්ධතාවයේ දෝෂයක් පවතී. පසුව නැවත උත්සාහ කරන්න.</p>";
-            }
+        // Font color eka change karana function eka
+        function changeColor() {
+            const randomColor = "#" + Math.floor(Math.random()*16777215).toString(16);
+            document.getElementById("text-preview").style.color = randomColor;
         }
+
+        // Browser eken auto-play block karana nisa, screen ekata click karapu gaman music play wenna
+        window.addEventListener('click', () => {
+            const audio = document.getElementById('bgMusic');
+            audio.play();
+        }, { once: true });
     </script>
 
 </body>
-  </html>
+</html>
