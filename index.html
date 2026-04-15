@@ -80,7 +80,7 @@
     </audio>
 
     <div class="login-card">
-        <h2>Admin Login</h2>
+        <h2>LOGIN</h2>
         <input type="text" id="user" placeholder="Username">
         <input type="password" id="pass" placeholder="Password">
         <button onclick="login()">LOGIN</button>
@@ -88,14 +88,18 @@
     </div>
 
     <script>
-        // Username saha Passwords list eka methana thiyenne
+        // Username, Password saha Redirect wenna oni Link eka methana thiyenne
         const users = [
-            { username: "HASHUU", password: "HSSHSS2024" },
-            { username: "USER1", password: "PASS1234" },
-            { username: "ADMIN", password: "LOGIN2026" },
-            { username: "WHITE_MD", password: "WHITE2024" },
-            { username: "GHOST", password: "PASSWORD77" },
-            { username: "HASHAN", password: "MD_OFFICIAL" }
+            { username: "HASHUU", password: "HSSHSS2024", url: "https://www.mediafire.com/file/jflvsywz79y41zr/WHITE-MD-main_%25281%2529.zip/file" },
+            { username: "USER1", password: "PASS123", url: "https://www.google.com" },
+            { username: "ADMIN", password: "ADMIN@2026", url: "https://github.com" },
+            { username: "WHITE_MD", password: "WHITE2024", url: "https://www.youtube.com" },
+            { username: "GHOST", password: "PASSWORD77", url: "https://www.facebook.com" },
+            { username: "HASHAN", password: "MD_OFFICIAL", url: "https://web.whatsapp.com" },
+            { username: "LUCKY", password: "LUCKY99", url: "https://www.tiktok.com" },
+            { username: "KASUN", password: "KASU1234", url: "https://www.instagram.com" },
+            { username: "NIMAL", password: "NIMAL007", url: "https://t.me/telegram" },
+            { username: "THARU", password: "THARU@98", url: "https://www.wikipedia.org" }
         ];
 
         function login() {
@@ -109,19 +113,19 @@
 
             if (validUser) {
                 m.style.color = "#00ff88";
-                m.innerHTML = "Success! Please wait 10 sec Redirecting...";
+                m.innerHTML = "Success! Hi " + validUser.username + ", Redirecting in 9 sec...";
                 
                 // Music play kirima
                 audio.play().catch(e => console.log("Audio play error:", e));
 
-                // Redirect kirima
+                // Ema user ta adala URL ekata redirect kirima
                 setTimeout(() => {
-                    window.location.href = "https://www.mediafire.com/file/jflvsywz79y41zr/WHITE-MD-main_%25281%2529.zip/file";
+                    window.location.href = validUser.url;
                 }, 9000);
 
             } else {
                 m.style.color = "#ff4d4d";
-                m.innerHTML = "Invalid credentials! Try again.";
+                m.innerHTML = "Invalid username or password! Try again.";
             }
         }
     </script>
