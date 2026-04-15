@@ -1,149 +1,172 @@
 <!DOCTYPE html>
-<html>
+<html lang="si">
 <head>
-    <title>Simple Car Racing Game</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cyber Chat Web</title>
     <style>
-        body { margin: 0; background: #222; overflow: hidden; font-family: 'Arial', sans-serif; }
-        #gameArea {
-            width: 400px;
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        
+        body {
+            background-color: #0d0d0d;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             height: 100vh;
-            background: #333;
-            margin: auto;
-            position: relative;
-            border-left: 5px dashed #fff;
-            border-right: 5px dashed #fff;
-            overflow: hidden;
-        }
-        .car {
-            width: 50px;
-            height: 80px;
-            background: #ff0000;
-            position: absolute;
-            bottom: 20px;
-            border-radius: 5px;
-            box-shadow: 0 0 10px #000;
-        }
-        .enemy {
-            width: 50px;
-            height: 80px;
-            background: #00ffcc;
-            position: absolute;
-            border-radius: 5px;
-        }
-        .line {
-            width: 10px;
-            height: 100px;
-            background: white;
-            position: absolute;
-            left: 195px;
-        }
-        #score {
-            position: absolute;
-            top: 20px;
-            left: 20px;
             color: white;
-            font-size: 20px;
-            background: rgba(0,0,0,0.5);
+        }
+
+        .chat-container {
+            width: 400px;
+            height: 600px;
+            background: #1a1a1a;
+            border: 1px solid #00ffcc;
+            display: flex;
+            flex-direction: column;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 0 20px #00ffcc55;
+        }
+
+        /* Header Section */
+        .chat-header {
+            padding: 15px;
+            background: #00ffcc;
+            color: #000;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .chat-header .status-dot {
+            width: 10px; height: 10px;
+            background: #000;
+            border-radius: 50%;
+        }
+
+        /* Messages Area */
+        .chat-messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            background-image: radial-gradient(#111 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+
+        .message {
+            max-width: 80%;
+            padding: 10px 15px;
+            border-radius: 15px;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        .sent {
+            align-self: flex-end;
+            background: #00ffcc;
+            color: #000;
+            border-bottom-right-radius: 2px;
+        }
+
+        .received {
+            align-self: flex-start;
+            background: #333;
+            color: #fff;
+            border-bottom-left-radius: 2px;
+        }
+
+        /* Input Area */
+        .chat-input-area {
+            padding: 15px;
+            background: #111;
+            display: flex;
+            gap: 10px;
+            border-top: 1px solid #333;
+        }
+
+        input {
+            flex: 1;
+            background: #222;
+            border: 1px solid #444;
             padding: 10px;
+            color: white;
+            border-radius: 5px;
+            outline: none;
+        }
+
+        input:focus { border-color: #00ffcc; }
+
+        button {
+            background: #00ffcc;
+            border: none;
+            padding: 0 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
 
-    <div id="score">Score: 0</div>
-    <div id="gameArea"></div>
+    <div class="chat-container">
+        <div class="chat-header">
+            <div class="status-dot"></div>
+            <span>CYBER CHAT GROUP</span>
+        </div>
+
+        <div class="chat-messages" id="chatBox">
+            <div class="message received">Mokada wenne? Meka oyage chat web eka!</div>
+            <div class="message sent">Patta! Mama meka design karanawa.</div>
+        </div>
+
+        <div class="chat-input-area">
+            <input type="text" id="msgInput" placeholder="Messege ekak gahanna..." onkeypress="handleEnter(event)">
+            <button onclick="sendMessage()">SEND</button>
+        </div>
+    </div>
 
     <script>
-        const gameArea = document.getElementById('gameArea');
-        const scoreElement = document.getElementById('score');
-        let player = { speed: 5, score: 0 };
-        let keys = {};
+        const chatBox = document.getElementById('chatBox');
+        const msgInput = document.getElementById('msgInput');
 
-        document.addEventListener('keydown', (e) => { keys[e.key] = true; });
-        document.addEventListener('keyup', (e) => { keys[e.key] = false; });
+        function sendMessage() {
+            const text = msgInput.value;
+            if (text.trim() !== "") {
+                // Create new message div
+                const msgDiv = document.createElement('div');
+                msgDiv.classList.add('message', 'sent');
+                msgDiv.innerText = text;
+                
+                // Add to chat box
+                chatBox.appendChild(msgDiv);
+                
+                // Clear input
+                msgInput.value = "";
+                
+                // Scroll to bottom
+                chatBox.scrollTop = chatBox.scrollHeight;
 
-        function createCar() {
-            let car = document.createElement('div');
-            car.setAttribute('class', 'car');
-            gameArea.appendChild(car);
-            player.x = car.offsetLeft;
-            player.y = car.offsetTop;
-            return car;
-        }
-
-        let myCar = createCar();
-
-        function moveLines() {
-            let lines = document.querySelectorAll('.line');
-            lines.forEach(function(item) {
-                if (item.y >= 700) { item.y -= 750; }
-                item.y += player.speed;
-                item.style.top = item.y + "px";
-            });
-        }
-
-        function moveEnemy(car) {
-            let enemies = document.querySelectorAll('.enemy');
-            enemies.forEach(function(item) {
-                if (isCollide(car, item)) {
-                    alert("Game Over! Score: " + player.score);
-                    location.reload();
-                }
-                if (item.y >= 750) {
-                    item.y = -300;
-                    item.style.left = Math.floor(Math.random() * 350) + "px";
-                    player.score++;
-                    scoreElement.innerText = "Score: " + player.score;
-                }
-                item.y += player.speed;
-                item.style.top = item.y + "px";
-            });
-        }
-
-        function isCollide(a, b) {
-            aRect = a.getBoundingClientRect();
-            bRect = b.getBoundingClientRect();
-            return !((aRect.top > bRect.bottom) || (aRect.bottom < bRect.top) || 
-                     (aRect.right < bRect.left) || (aRect.left > bRect.right));
-        }
-
-        function gamePlay() {
-            if (player.start) {
-                moveLines();
-                moveEnemy(myCar);
-
-                if (keys.ArrowLeft && player.x > 0) { player.x -= player.speed; }
-                if (keys.ArrowRight && player.x < 350) { player.x += player.speed; }
-                if (keys.ArrowUp && player.y > 100) { player.y -= player.speed; }
-                if (keys.ArrowDown && player.y < 600) { player.y += player.speed; }
-
-                myCar.style.top = player.y + "px";
-                myCar.style.left = player.x + "px";
-
-                window.requestAnimationFrame(gamePlay);
+                // Auto reply (Demo purpose)
+                setTimeout(() => {
+                    const replyDiv = document.createElement('div');
+                    replyDiv.classList.add('message', 'received');
+                    replyDiv.innerText = "System: Message eka labuna!";
+                    chatBox.appendChild(replyDiv);
+                    chatBox.scrollTop = chatBox.scrollHeight;
+                }, 1000);
             }
         }
 
-        // Initialize Game
-        player.start = true;
-        for (x = 0; x < 5; x++) {
-            let roadLine = document.createElement('div');
-            roadLine.setAttribute('class', 'line');
-            roadLine.y = (x * 150);
-            roadLine.style.top = roadLine.y + "px";
-            gameArea.appendChild(roadLine);
+        function handleEnter(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
         }
-
-        for (x = 0; x < 3; x++) {
-            let enemyCar = document.createElement('div');
-            enemyCar.setAttribute('class', 'enemy');
-            enemyCar.y = ((x + 1) * 350) * -1;
-            enemyCar.style.top = enemyCar.y + "px";
-            enemyCar.style.left = Math.floor(Math.random() * 350) + "px";
-            gameArea.appendChild(enemyCar);
-        }
-
-        window.requestAnimationFrame(gamePlay);
     </script>
+
 </body>
 </html>
