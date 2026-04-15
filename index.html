@@ -47,9 +47,7 @@
             outline: none;
         }
 
-        input:focus {
-            border-color: #00d4ff;
-        }
+        input:focus { border-color: #00d4ff; }
 
         button {
             width: 100%;
@@ -81,9 +79,8 @@
         <source src="https://raw.githubusercontent.com/HASHU-MD/hashu-database-music/refs/heads/main/VID-20260411-WA0000.mp4" type="audio/mpeg">
     </audio>
 
-    
     <div class="login-card">
-        <h2>Hashuu Login</h2>
+        <h2>Admin Login</h2>
         <input type="text" id="user" placeholder="Username">
         <input type="password" id="pass" placeholder="Password">
         <button onclick="login()">LOGIN</button>
@@ -91,36 +88,33 @@
     </div>
 
     <script>
+        // Username saha Passwords list eka methana thiyenne
+        const users = [
+            { username: "HASHUU", password: "HSSHSS2024" },
+            { username: "USER1", password: "PASS1234" },
+            { username: "ADMIN", password: "LOGIN2026" },
+            { username: "WHITE_MD", password: "WHITE2024" },
+            { username: "GHOST", password: "PASSWORD77" },
+            { username: "HASHAN", password: "MD_OFFICIAL" }
+        ];
+
         function login() {
-            const u = document.getElementById("user").value;
-            const p = document.getElementById("pass").value;
+            const uInput = document.getElementById("user").value;
+            const pInput = document.getElementById("pass").value;
             const m = document.getElementById("msg");
             const audio = document.getElementById("myAudio");
 
-            // මෙතනට ඔයාට ඕන ඕනෑම Username සහ Password එකක් ඇතුළත් කරන්න පුළුවන්
-        const users = {
-            "HASHU": "HSSHSS2024",
-            "USER1": "PASS123",
-            "ADMIN": "ADMIN@2026",
-            "SAMPATH": "SAM99",
-            "KASUN": "KASU1234",
-            "NIMAL": "NIMAL007",
-            "GAYAN": "GAYAN#55",
-            "THARU": "THARU@98",
-            "MALITH": "MALITH_MD",
-            "WHITE": "WHITE_OFFICIAL",
-            "LUCKY": "LUCKY_2026"
-        };
-            
-                m.style.color = "#00ff88";
-                m.innerHTML = "Success! wait 10 sec Redirecting...";
+            // Input karapu user list eke thiyeda kiyala check kirima
+            const validUser = users.find(u => u.username === uInput && u.password === pInput);
 
+            if (validUser) {
+                m.style.color = "#00ff88";
+                m.innerHTML = "Success! Please wait 10 sec Redirecting...";
                 
                 // Music play kirima
-          
-                 audio.play();
+                audio.play().catch(e => console.log("Audio play error:", e));
 
-                // Seconds 2kin redirect wenna hadala thiyenawa
+                // Redirect kirima
                 setTimeout(() => {
                     window.location.href = "https://www.mediafire.com/file/jflvsywz79y41zr/WHITE-MD-main_%25281%2529.zip/file";
                 }, 9000);
