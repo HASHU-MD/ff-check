@@ -1,130 +1,149 @@
 <!DOCTYPE html>
-<html lang="si">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Font & Style Generator</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Bangers&family=Dancing+Script&family=Creepster&family=Roboto+Mono&display=swap" rel="stylesheet">
-    
+    <title>Simple Car Racing Game</title>
     <style>
-        body {
-            background-color: #0a0a0a;
-            color: #00ffcc;
-            font-family: 'Orbitron', sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
+        body { margin: 0; background: #222; overflow: hidden; font-family: 'Arial', sans-serif; }
+        #gameArea {
+            width: 400px;
             height: 100vh;
-            margin: 0;
-            text-shadow: 0 0 10px #00ffcc;
+            background: #333;
+            margin: auto;
+            position: relative;
+            border-left: 5px dashed #fff;
+            border-right: 5px dashed #fff;
+            overflow: hidden;
         }
-
-        .container {
-            background: rgba(20, 20, 20, 0.9);
-            padding: 40px;
-            border-radius: 20px;
-            border: 2px solid #00ffcc;
-            box-shadow: 0 0 20px #00ffcc;
-            text-align: center;
-            width: 80%;
-            max-width: 600px;
-        }
-
-        h1 { font-size: 24px; margin-bottom: 30px; }
-
-        #display-text {
-            font-size: 50px;
-            margin: 40px 0;
-            min-height: 80px;
-            transition: all 0.4s ease;
-        }
-
-        .controls {
-            display: flex;
-            gap: 10px;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        select, button {
-            padding: 10px 20px;
-            background: transparent;
-            color: #00ffcc;
-            border: 1px solid #00ffcc;
-            cursor: pointer;
-            font-family: 'Orbitron', sans-serif;
+        .car {
+            width: 50px;
+            height: 80px;
+            background: #ff0000;
+            position: absolute;
+            bottom: 20px;
             border-radius: 5px;
-            outline: none;
+            box-shadow: 0 0 10px #000;
         }
-
-        button:hover {
+        .enemy {
+            width: 50px;
+            height: 80px;
             background: #00ffcc;
-            color: #000;
+            position: absolute;
+            border-radius: 5px;
         }
-
-        /* Music info */
-        .music-status {
-            margin-top: 20px;
-            font-size: 10px;
-            letter-spacing: 2px;
-            opacity: 0.7;
+        .line {
+            width: 10px;
+            height: 100px;
+            background: white;
+            position: absolute;
+            left: 195px;
+        }
+        #score {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            color: white;
+            font-size: 20px;
+            background: rgba(0,0,0,0.5);
+            padding: 10px;
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <h1>FONT GENERATOR</h1>
-        
-        <div id="display-text">SAMPLE TEXT</div>
-
-        <div class="controls">
-            <select id="fontSelect" onchange="changeFont()">
-                <option value="'Orbitron', sans-serif">Cyber Style</option>
-                <option value="'Bangers', system-ui">Comic Style</option>
-                <option value="'Dancing Script', cursive">Cursive Style</option>
-                <option value="'Creepster', system-ui">Horror Style</option>
-                <option value="'Roboto Mono', monospace">Hacker Style</option>
-            </select>
-            
-            <button onclick="changeColor()">Random Color</button>
-        </div>
-
-        <div class="music-status">
-            SYSTEM AUDIO: <span id="status">CLICK ANYWHERE TO PLAY MUSIC</span>
-        </div>
-    </div>
-
-    <audio id="bgMusic" loop>
-        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
-    </audio>
+    <div id="score">Score: 0</div>
+    <div id="gameArea"></div>
 
     <script>
-        const displayText = document.getElementById('display-text');
-        const bgMusic = document.getElementById('bgMusic');
-        const statusText = document.getElementById('status');
+        const gameArea = document.getElementById('gameArea');
+        const scoreElement = document.getElementById('score');
+        let player = { speed: 5, score: 0 };
+        let keys = {};
 
-        // Font eka wenas karana function eka
-        function changeFont() {
-            const selectedFont = document.getElementById('fontSelect').value;
-            displayText.style.fontFamily = selectedFont;
+        document.addEventListener('keydown', (e) => { keys[e.key] = true; });
+        document.addEventListener('keyup', (e) => { keys[e.key] = false; });
+
+        function createCar() {
+            let car = document.createElement('div');
+            car.setAttribute('class', 'car');
+            gameArea.appendChild(car);
+            player.x = car.offsetLeft;
+            player.y = car.offsetTop;
+            return car;
         }
 
-        // Color eka wenas karana function eka
-        function changeColor() {
-            const colors = ['#00ffcc', '#ff0055', '#0077ff', '#ffff00', '#ff00ff', '#ffffff'];
-            const randomColor = colors[Math.floor(Math.random() * colors.length)];
-            displayText.style.color = randomColor;
-            displayText.style.textShadow = `0 0 20px ${randomColor}`;
+        let myCar = createCar();
+
+        function moveLines() {
+            let lines = document.querySelectorAll('.line');
+            lines.forEach(function(item) {
+                if (item.y >= 700) { item.y -= 750; }
+                item.y += player.speed;
+                item.style.top = item.y + "px";
+            });
         }
 
-        // Screen eka kohe hari click karapu gaman music play wenna
-        window.addEventListener('click', () => {
-            bgMusic.play();
-            statusText.innerText = "MUSIC PLAYING ON LOOP";
-        }, { once: true });
+        function moveEnemy(car) {
+            let enemies = document.querySelectorAll('.enemy');
+            enemies.forEach(function(item) {
+                if (isCollide(car, item)) {
+                    alert("Game Over! Score: " + player.score);
+                    location.reload();
+                }
+                if (item.y >= 750) {
+                    item.y = -300;
+                    item.style.left = Math.floor(Math.random() * 350) + "px";
+                    player.score++;
+                    scoreElement.innerText = "Score: " + player.score;
+                }
+                item.y += player.speed;
+                item.style.top = item.y + "px";
+            });
+        }
+
+        function isCollide(a, b) {
+            aRect = a.getBoundingClientRect();
+            bRect = b.getBoundingClientRect();
+            return !((aRect.top > bRect.bottom) || (aRect.bottom < bRect.top) || 
+                     (aRect.right < bRect.left) || (aRect.left > bRect.right));
+        }
+
+        function gamePlay() {
+            if (player.start) {
+                moveLines();
+                moveEnemy(myCar);
+
+                if (keys.ArrowLeft && player.x > 0) { player.x -= player.speed; }
+                if (keys.ArrowRight && player.x < 350) { player.x += player.speed; }
+                if (keys.ArrowUp && player.y > 100) { player.y -= player.speed; }
+                if (keys.ArrowDown && player.y < 600) { player.y += player.speed; }
+
+                myCar.style.top = player.y + "px";
+                myCar.style.left = player.x + "px";
+
+                window.requestAnimationFrame(gamePlay);
+            }
+        }
+
+        // Initialize Game
+        player.start = true;
+        for (x = 0; x < 5; x++) {
+            let roadLine = document.createElement('div');
+            roadLine.setAttribute('class', 'line');
+            roadLine.y = (x * 150);
+            roadLine.style.top = roadLine.y + "px";
+            gameArea.appendChild(roadLine);
+        }
+
+        for (x = 0; x < 3; x++) {
+            let enemyCar = document.createElement('div');
+            enemyCar.setAttribute('class', 'enemy');
+            enemyCar.y = ((x + 1) * 350) * -1;
+            enemyCar.style.top = enemyCar.y + "px";
+            enemyCar.style.left = Math.floor(Math.random() * 350) + "px";
+            gameArea.appendChild(enemyCar);
+        }
+
+        window.requestAnimationFrame(gamePlay);
     </script>
-
 </body>
-    </html>
+</html>
