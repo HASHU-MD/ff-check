@@ -1,10 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="si">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login Page</title>
+    <title>Dark Login Page - Hashuu</title>
     <style>
+        /* Dark Theme Styling */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #0f0f0f;
@@ -14,70 +15,116 @@
             align-items: center;
             height: 100vh;
             margin: 0;
+            overflow: hidden;
         }
-        .login-container {
+
+        .login-box {
             background-color: #1a1a1a;
             padding: 40px;
-            border-radius: 10px;
-            box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+            width: 350px;
             text-align: center;
-            width: 300px;
-            border: 1px solid #00ffff;
+            border: 1px solid #333;
         }
-        h2 { color: #00ffff; margin-bottom: 20px; }
+
+        h2 {
+            margin-bottom: 30px;
+            color: #00d4ff;
+            letter-spacing: 2px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
         input {
             width: 100%;
             padding: 12px;
-            margin: 10px 0;
-            border-radius: 5px;
-            border: 1px solid #333;
-            background: #222;
-            color: white;
+            margin-top: 5px;
+            border: 1px solid #444;
+            border-radius: 8px;
+            background-color: #252525;
+            color: #fff;
+            font-size: 16px;
             box-sizing: border-box;
+            outline: none;
         }
+
+        input:focus {
+            border-color: #00d4ff;
+        }
+
         button {
             width: 100%;
             padding: 12px;
-            background-color: #00ffff;
+            background-color: #00d4ff;
             border: none;
-            border-radius: 5px;
+            border-radius: 8px;
             color: #000;
             font-weight: bold;
+            font-size: 16px;
             cursor: pointer;
             transition: 0.3s;
+            margin-top: 10px;
         }
-        button:hover { background-color: #00cccc; }
-        #message { color: #ff4444; margin-top: 10px; font-size: 14px; }
+
+        button:hover {
+            background-color: #0099cc;
+            transform: translateY(-2px);
+        }
+
+        #error-msg {
+            color: #ff4d4d;
+            margin-top: 15px;
+            font-size: 14px;
+            display: none;
+        }
     </style>
 </head>
 <body>
 
-<div class="login-container">
-    <h2>Login</h2>
-    <input type="text" id="username" placeholder="Username">
-    <input type="password" id="password" placeholder="Password">
-    <button onclick="checkLogin()">Log In</button>
-    <p id="message"></p>
-</div>
+    <audio id="bgMusic" loop>
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+    </audio>
 
-<script>
-    function checkLogin() {
-        const user = document.getElementById('username').value;
-        const pass = document.getElementById('password').value;
-        const message = document.getElementById('message');
+    <div class="login-box">
+        <h2>LOGIN</h2>
+        <div class="input-group">
+            <input type="text" id="username" placeholder="Username">
+        </div>
+        <div class="input-group">
+            <input type="password" id="password" placeholder="Password">
+        </div>
+        <button onclick="validateLogin()">LOG IN</button>
+        <p id="error-msg">Invalid Username or Password!</p>
+    </div>
 
-        // Logic for HASHAN-MD credentials
-        if (user === "HASHAN-MD" && pass === "HASHAN-MD") {
-            message.style.color = "#00ff00";
-            message.innerText = "Login Success Redirecting...";
-            
-            // Redirect to your site
-            window.location.href = "https://sites.google.com/view/premium-tools-sawi";
-        } else {
-            message.innerText = "Invalid Username or Password!";
+    <script>
+        function validateLogin() {
+            var user = document.getElementById("username").value;
+            var pass = document.getElementById("password").value;
+            var error = document.getElementById("error-msg");
+            var music = document.getElementById("bgMusic");
+
+            // Username saha Password pariksha kirima
+            if (user === "HASHUU" && pass === "HASHUU2010") {
+                // Music play kirima (Browser settings nisa user action ekakin pasu play we)
+                music.play().catch(error => console.log("Music play failed: ", error));
+                
+                alert("Login Success! Redirecting...");
+                
+                // Nirdeshitha site ekata auto redirect kirima
+                window.location.href = "https://hashan-md-official-page.vercel.app/";
+            } else {
+                // Weradi credentials nam error message eka pennima
+                error.style.display = "block";
+                document.getElementById("username").value = "";
+                document.getElementById("password").value = "";
+            }
         }
-    }
-</script>
+    </script>
 
 </body>
 </html>
